@@ -44,6 +44,7 @@
     "ember-cli-babel": "^5.1.3"
   },
   "ember-addon": {
+    "demoURL": "http://onechiporenko.github.io/ember-to-string/",
     "configPath": "tests/dummy/config"
   }
 }
