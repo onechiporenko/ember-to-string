@@ -5,7 +5,6 @@ import Ember from 'ember';
 const {
   observer,
   computed,
-  get,
   on
 } = Ember;
 
