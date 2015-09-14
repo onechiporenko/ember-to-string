@@ -14,9 +14,6 @@ export default Ember.Controller.extend({
 
   abc: [1],
 
-  firstName: null,
-  lastName: null,
-
   fullName: computed('firstName', 'lastName', {
     get() {
       return this.get('firstName') + ' ' + this.get('lastName');
@@ -32,41 +29,75 @@ export default Ember.Controller.extend({
 
   some: Ember.inject.controller('some'),
 
-  someNotComputedVariable: Ember.Object.create({
-    a: A([]),
-    b: ['a', 'b', 'c'],
-    c: 'abc',
+  a: Ember.A([1,2,3]),
+  b: Ember.A([1,2,3]),
+
+  firstName: 'a',
+  lastName: 'b',
+
+  notComputedEmberObject: Ember.Object.create({
+    a: 1,
+    b: 'b',
+    c: [1, 2, 3],
     d: true
   }),
 
-  someVariable: computed('abc.[]', 'def.length', function() {
-    return this.get('abc.length');
-  }),
+  notComputedObject: {
+    a: 'a',
+    b: 123,
+    c: true,
+    d: null
+  },
 
-  someVariable2: computed('abc.[]', 'def.length', function() {
-    return this.get('abc.length');
-  }),
-
-  someVariable3: computed('abc', function() {
-    return this.get('abc.length');
-  }),
-
-  someVariable4: computed('abc', function() {
+  computedPropertyEmberObject: computed('a.firstObject', 'b.[]', function() {
     return Ember.Object.create({
-      a: 1,
-      l: get(this, 'abc.length')
+      a: this.get('a.firstObject'),
+      b: this.get('b.length')
     });
   }),
 
-  someFunction: on('init', observer('abc', 'def', 'ghi.[]', function() {
-    var abc = this.get('abc');
-    this.set('def', abc);
+  computedPropertyWithGetterSetter: computed('firstName', 'lastName', {
+    get() {
+      return this.get('firstName') + ' ' + this.get('lastName');
+    },
+    set(key, value) {
+      var parts = value.split(/\s+/);
+      this.setProperties({
+        firstName: parts[0],
+        lastName: parts[1]
+      });
+    }
+  }),
+
+  method(a, b, c) {
+    this.set('c', a + b + c);
+  },
+
+  methodObserver: observer('a.[]', 'b.[]', function () {
+    var a = this.get('a.length');
+    var b = this.get('b.length');
+    this.set('c', a + b);
+  }),
+
+  methodListener: on('init', function () {
+    var a = this.get('a.length');
+    var b = this.get('b.length');
+    this.set('c', a + b);
+  }),
+
+  methodObserverListener: on('init', observer('a.[]', 'b.[]', function () {
+    var a = this.get('a.length');
+    var b = this.get('b.length');
+    this.set('c', a + b);
   })),
 
   actions: {
-    someAction () {
-      this.set('abc', 123);
+
+    someAction: function () {
+      var a = this.get('a');
+      this.set('c', a.get('length'));
     }
+
   }
 
 });
