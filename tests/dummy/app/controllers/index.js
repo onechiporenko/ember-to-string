@@ -26,6 +26,7 @@ export default Ember.Controller.extend({
   }),
 
   some: Ember.inject.controller('some'),
+  service: Ember.inject.service('someService'),
 
   a: Ember.A([1,2,3]),
   b: Ember.A([1,2,3]),

@@ -70,6 +70,13 @@ let targetObject = Ember.Controller.extend({
     this.set('c', a + b);
   })),
 
+  service: Ember.inject.service('someService'),
+
+  // dummy way to simulate container
+  container: {
+    lookup: Ember.K
+  },
+
   actions: {
 
     someAction: function () {
@@ -121,4 +128,8 @@ test('Method is listener', function (assert) {
 
 test('Method is observer and listener', function (assert) {
   assert.equal(minifier(toString([targetObject, 'methodObserverListener'])), `methodObserverListener: Ember.on('init', Ember.observer('a.[]', 'b.[]', function () { var a = this.get('a.length'); var b = this.get('b.length'); this.set('c', a + b); }))`);
+});
+
+test('Injection', function (assert) {
+  assert.equal(minifier(toString([targetObject, 'service'])), `service: Ember.inject.service('someService')`);
 });

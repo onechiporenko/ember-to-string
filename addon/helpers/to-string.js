@@ -107,6 +107,24 @@ function calculatedValue(targetObject, varName) {
 }
 
 /**
+ * Stringify controller/service injection
+ * Output examples:
+ * <pre>
+ *   varName: Ember.inject.service('...')
+ * </pre>
+ * <pre>
+ *   varName: Ember.inject.controller('...')
+ * </pre>
+ * @param {object} targetObject object where variable declared
+ * @param {string} varName name of needed variable
+ * @returns {string}
+ */
+function injection(targetObject, varName) {
+  let shown =  targetObject[varName];
+  return `${varName}: Ember.inject.${shown.type}('${shown.name}')`;
+}
+
+/**
  *
  * @param {array} params
  *  params[0] - object    object where needed variable is declared
@@ -119,6 +137,10 @@ export function toString(params) {
   let varName = params[1];
   let shown = get(targetObject, varName);
   if (targetObject[varName] && targetObject[varName].isDescriptor) {
+    if ('injectedPropertyGet' === targetObject[varName]._getter.name) {
+      // injection
+      return injection(targetObject, varName);
+    }
     // some computed property
     if (params[2]) {
       // show calculated
