@@ -135,9 +135,9 @@ function injection(targetObject, varName) {
 export function toString(params) {
   let targetObject = params[0];
   let varName = params[1];
-  let shown = get(targetObject, varName);
+
   if (targetObject[varName] && targetObject[varName].isDescriptor) {
-    if ('injectedPropertyGet' === targetObject[varName]._getter.name) {
+    if (targetObject[varName]._getter && 'injectedPropertyGet' === targetObject[varName]._getter.name) {
       // injection
       return injection(targetObject, varName);
     }
@@ -149,6 +149,7 @@ export function toString(params) {
     // shown as is
     return computedProperty(targetObject, varName);
   }
+  let shown = get(targetObject, varName);
   if (isNone(shown)) {
     // try as action
     shown = get(targetObject, '_actions.' + varName);
