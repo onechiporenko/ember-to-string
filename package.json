@@ -1,6 +1,6 @@
 {
   "name": "ember-to-string",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Try to show string representation of the methods, actions, observers, listeners, computed properties etc",
   "directories": {
     "doc": "doc",
