@@ -15,7 +15,7 @@
   "engines": {
     "node": ">= 0.10.0"
   },
-  "author": "",
+  "author": "onechiporenko",
   "license": "MIT",
   "devDependencies": {
     "broccoli-asset-rev": "^2.4.2",
@@ -37,7 +37,6 @@
     "ember-export-application-global": "^1.0.5",
     "ember-load-initializers": "^0.5.1",
     "ember-resolver": "^2.0.3",
-    "ember-version-is": "0.0.3",
     "ember-welcome-page": "^1.0.1",
     "loader.js": "^4.0.1"
   },
@@ -48,7 +47,8 @@
     "to-string"
   ],
   "dependencies": {
-    "ember-cli-babel": "^5.1.6"
+    "ember-cli-babel": "^5.1.6",
+    "ember-version-is": "0.0.3"
   },
   "ember-addon": {
     "demoURL": "http://onechiporenko.github.io/ember-to-string/",
