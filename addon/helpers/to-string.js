@@ -1,4 +1,5 @@
 import Ember from 'ember';
+import emberVersionIs from 'ember-version-is';
 
 const {
   typeOf,
@@ -12,7 +13,7 @@ const {
  * @returns {string}
  */
 function f2str(f) {
-  return f.toString().replace(/Ember\['default'\]/g, 'Ember');
+  return f.toString().replace(/(_e|E)mber\['default'\]/g, 'Ember');
 }
 
 /**
@@ -120,7 +121,7 @@ function calculatedValue(targetObject, varName) {
  * @returns {string}
  */
 function injection(targetObject, varName) {
-  let shown =  targetObject[varName];
+  let shown = targetObject[varName];
   return `${varName}: Ember.inject.${shown.type}('${shown.name}')`;
 }
 
@@ -132,17 +133,14 @@ function injection(targetObject, varName) {
  *  params[2] - boolean   (optional) if shown variable is computed property this flag is used to select the way of displaying (true - calculate value and show result, false - show it as is the object)
  * @returns {string}
  */
-export function toString(params) {
-  let targetObject = params[0];
-  let varName = params[1];
-
+export function toString([targetObject, varName, showCalculated]) {
   if (targetObject[varName] && targetObject[varName].isDescriptor) {
     if (targetObject[varName]._getter && 'injectedPropertyGet' === targetObject[varName]._getter.name) {
       // injection
       return injection(targetObject, varName);
     }
     // some computed property
-    if (params[2]) {
+    if (showCalculated) {
       // show calculated
       return calculatedValue(targetObject, varName);
     }
@@ -152,7 +150,8 @@ export function toString(params) {
   let shown = get(targetObject, varName);
   if (isNone(shown)) {
     // try as action
-    shown = get(targetObject, '_actions.' + varName);
+    const actionsKey = emberVersionIs('lessThan', '2.0.0') ? '_actions' : 'actions';
+    shown = get(targetObject, `${actionsKey}.${varName}`);
     if ('function' === typeOf(shown)) {
       return f2str(shown);
     }
