@@ -74,7 +74,7 @@ let targetObject = Ember.Controller.extend({
 
   // dummy way to simulate container
   container: {
-    lookup: Ember.K
+    lookup() {}
   },
 
   actions: {
