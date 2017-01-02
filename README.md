@@ -1,4 +1,4 @@
-# Ember-checkboxes-list
+# Ember-to-string
 
 [![Build Status](https://travis-ci.org/onechiporenko/ember-to-string.svg)](https://travis-ci.org/onechiporenko/ember-to-string)
 [![Codacy Badge](https://www.codacy.com/project/badge/062ef689838e43dfa46eecd1f74f22af)](https://www.codacy.com/app/cv_github/ember-to-string)
