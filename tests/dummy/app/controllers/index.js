@@ -48,6 +48,15 @@ export default Ember.Controller.extend({
     d: null
   },
 
+  objectWithMethod: {
+    a: 'a',
+    b: {
+      func(a, b, c) {
+        return a + b + c;
+      }
+    }
+  },
+
   computedPropertyEmberObject: computed('a.firstObject', 'b.[]', function() {
     return Ember.Object.create({
       a: this.get('a.firstObject'),

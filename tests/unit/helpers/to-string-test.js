@@ -72,6 +72,15 @@ let targetObject = Ember.Controller.extend({
 
   service: Ember.inject.service('someService'),
 
+  objectWithMethod: {
+    a: 'a',
+    b: {
+      func(a, b, c) {
+        return a + b + c;
+      }
+    }
+  },
+
   // dummy way to simulate container
   container: {
     lookup() {}
@@ -132,4 +141,8 @@ test('Method is observer and listener', function (assert) {
 
 test('Injection', function (assert) {
   assert.equal(minifier(toString([targetObject, 'service'])), `service: Ember.inject.service('someService')`);
+});
+
+test('Object with method', function (assert) {
+  assert.equal(minifier(toString([targetObject, 'objectWithMethod'])), `objectWithMethod: { "a": "a", "b": { "func": function func(a, b, c) { return a + b + c; } } }`);
 });

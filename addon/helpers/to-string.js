@@ -2,10 +2,15 @@ import Ember from 'ember';
 import emberVersionIs from 'ember-version-is';
 
 const {
+  A,
   typeOf,
   get,
   isNone
 } = Ember;
+
+function escapeRegExp(str) {
+  return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
+}
 
 /**
  * Get function's string representation with replacing "Ember['default']" to "Ember"
@@ -103,8 +108,26 @@ function computedProperty(targetObject, varName) {
  */
 function calculatedValue(targetObject, varName) {
   let shown = get(targetObject, varName);
-  var plain = JSON.stringify(shown, null, 2);
-  return `${varName}: ` + ('instance' === typeOf(shown) ? `Ember.Object.create(${plain})` : plain);
+  const funcs = A([]);
+  const plain = JSON.stringify(shown, (key, value) => {
+    if ('function' === typeOf(value)) {
+      const f = f2str(value);
+      funcs.pushObject(f.replace(/\n/g, '\\n'));
+      return f;
+    }
+    return value;
+  }, 2);
+  let calculated = `${varName}: ` + ('instance' === typeOf(shown) ? `Ember.Object.create(${plain})` : plain);
+
+  // remove quotes around function bodies
+  funcs.sortBy('length').reverse().forEach(fStringified => calculated = calculated
+    .replace(new RegExp(`"${escapeRegExp(fStringified)}"`, 'g'), fStringified)
+    .replace(/\\n/g, '\n')
+    .replace(/\\r/g, '\r')
+    .replace(/\\t/g, '\t')
+  );
+
+  return calculated;
 }
 
 /**
